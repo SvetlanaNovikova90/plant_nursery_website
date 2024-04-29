@@ -8,13 +8,13 @@ class Command(BaseCommand):
 
     @staticmethod
     def json_read_categories():
-        with open('categories.json', encoding="UTF-16") as file:
+        with open('data.json', encoding="UTF-16") as file:
             data = json.load(file)
         return [item for item in data if item['model'] == 'catalog.category']
 
     @staticmethod
     def json_read_products():
-        with open('products.json', encoding="UTF-16") as file:
+        with open('data.json', encoding="UTF-16") as file:
             data = json.load(file)
         return [item for item in data if item['model'] == 'catalog.product']
 
