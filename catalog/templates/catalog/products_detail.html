@@ -4,35 +4,31 @@
 
     <main role="main">
 
-      <section class="jumbotron text-center">
-        <div class="container">
-          <h1 class="jumbotron-heading">Album example</h1>
-          <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it entirely.</p>
-          <p>
-            <a href="#" class="btn btn-primary my-2">Main call to action</a>
-            <a href="#" class="btn btn-secondary my-2">Secondary action</a>
-          </p>
-        </div>
-      </section>
+
 
       <div class="album py-5 bg-light">
         <div class="container">
 
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-10">
 
               <div class="card mb-4 box-shadow">
-
-                <img class="card-img-top" src="{{ product.image_ph | media_filter}}"  width="200" height="300" alt="Card image cap">
+               <div class="container text-center">
+                  <div class="row">
+                     <div class="col">
+                <img class="card-img-top" src="{{ product.image_ph | media_filter}}"   alt="Card image cap">
+                     </div>
+                     <div class="col">
                 <div class="card-body">
                   <p class="card-text">{{product.name}}</p>
                   <p class="card-text">{{product.description}}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-outline-secondary">Купить</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary" href="products">Обратно</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'shop:product'%}">Обратно</button>
                     </div>
-                    <small class="text-muted">9 mins</small>
+                    <small class="text-muted">{{product.price}} руб.</small>
+                  </div>
                   </div>
                 </div>
 
