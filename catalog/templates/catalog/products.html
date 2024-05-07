@@ -1,4 +1,5 @@
 {% extends 'catalog/basic_emplate.html'%}
+{% load my_tags %}
 {% block content %}
 
     <main role="main">
@@ -23,7 +24,7 @@
 
               <div class="card mb-4 box-shadow">
 
-                <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
+                <img class="card-img-top" src="{{ product.image_ph | media_filter}}" alt="Card image cap">
                 <div class="card-body">
                   <p class="card-text">{{product.name}}</p>
                   <div class="d-flex justify-content-between align-items-center">
