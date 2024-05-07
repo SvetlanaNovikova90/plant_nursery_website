@@ -24,9 +24,10 @@
 
               <div class="card mb-4 box-shadow">
 
-                <img class="card-img-top" src="{{ product.image_ph | media_filter}}" alt="Card image cap">
+                <img class="card-img-top" src="{{ product.image_ph | media_filter}}"  width="200" height="300" alt="Card image cap">
                 <div class="card-body">
                   <p class="card-text">{{product.name}}</p>
+                  <p class="card-text">{{product.description | truncatechars:100}}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
