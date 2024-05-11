@@ -45,14 +45,14 @@ class Category(models.Model):
 
 class BlogPost(models.Model):
     title = models.CharField(max_length=100, verbose_name="заголовок")
-    slug = models.CharField(max_length=50, verbose_name="slug")
+    slug = models.CharField(max_length=50, **NULLABLE, verbose_name="slug")
     description = models.TextField(**NULLABLE, verbose_name="содержимое")
     image_ph = models.ImageField(
         upload_to="blog/", **NULLABLE, verbose_name="Изображение(превью)"
     )
     created_at = models.DateField(auto_now_add=True, verbose_name="Дата создания")
-    is_active = models.BooleanField(default=False)
-    views_counter = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    views_counter = models.IntegerField(default=0, verbose_name="Счетчик просмотров")
 
     def __str__(self):
         return f"{self.title}"
