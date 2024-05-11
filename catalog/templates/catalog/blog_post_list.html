@@ -1,0 +1,52 @@
+{% extends 'catalog/basic_emplate.html'%}
+{% load my_tags %}
+{% block content %}
+
+<main role="main" xmlns="http://www.w3.org/1999/html">
+
+      <section class="jumbotron text-center">
+        <div class="container">
+          <h1 class="jumbotron-heading fw-bold text-success">Блог</h1>
+
+            <a href="{% url 'shop:post_create' %}" class="icon-link btn btn-outline-success my-2">Создать запись</a>
+            <a href="{% url 'shop:home' %}" class="icon-link btn btn-outline-success my-2">Выйти</a>
+
+        </div>
+      </section>
+
+      <div class="album py-5 bg-light">
+        <div class="container">
+<form method="post" action="" class="form-floating">
+   {% csrf_token %}
+          <div class="row">
+            {% for post in object_list %}
+            <div class="col-md-4">
+
+              <div class="card mb-4 box-shadow">
+
+                <img class="card-img-top" src="{{ post.image_ph | media_filter}}" alt="Card image cap">
+                <div class="card-body">
+                  <p class="card-text">{{post.title}}</p>
+                  <p class="card-text">{{post.description | truncatechars:100}}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                     <a class="btn btn-outline-success" href="{% url 'shop:post_detail' post.pk %}" role="button">Открыть</a>
+                        <a class="btn btn-outline-success" href="{% url 'shop:post_update' post.pk %}" role="button">Изенить</a>
+                      <a class="btn btn-outline-success" href="{% url 'shop:post_delete' post.pk %}" role="button">Удалить</a>
+                      </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+             {% endfor %}
+          </div>
+</form>
+        </div>
+      </div>
+
+    </main>
+
+
+{% endblock %}

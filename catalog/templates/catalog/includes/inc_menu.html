@@ -18,11 +18,11 @@
             <svg class="bi" width="24" height="24"><use xlink:href="#aperture"></use></svg>
           </a></li>
           <li class="nav-item"><a class="nav-link" href="#">Заказ</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Оплата</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'shop:blog_post'%}">Блог</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Доставка</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Карзина</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'shop:contact'%}" target="_blank">Контакты</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'shop:product'%}" target="_blank">Каталог</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'shop:products'%}" target="_blank">Каталог</a></li>
         </ul>
       </div>
     </div>
