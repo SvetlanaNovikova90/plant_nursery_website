@@ -2,7 +2,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from catalog.views import ProductsListView, ProductsDetailView, contact, BlogPostListView, PostCreateView, \
-    PostDetailView, PostUpdateView, PostDeleteView
+    PostDetailView, PostUpdateView, PostDeleteView, ProductCreateView, ProductUpdateView, ProductDeleteView
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name='catalog/index.html'), name='home'),
@@ -14,4 +14,7 @@ urlpatterns = [
     path("blog_post/<int:pk>/", PostDetailView.as_view(), name='post_detail'),
     path("<int:pk>/update/", PostUpdateView.as_view(), name='post_update'),
     path("delete/<int:pk>/", PostDeleteView.as_view(), name='post_delete'),
+    path("product_create/", ProductCreateView.as_view(), name='product_create'),
+    path("<int:pk>/product_update/", ProductUpdateView.as_view(), name='product_update'),
+    path("product_delete/<int:pk>/", ProductDeleteView.as_view(), name='product_delete')
 ]
