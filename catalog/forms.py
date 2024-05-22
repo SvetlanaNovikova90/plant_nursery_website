@@ -26,8 +26,17 @@ class ProductForm(StyleMixin, ModelForm):
         for i in forbidden_words:
             if i in cleaned_data:
                 raise forms.ValidationError('Вы ввели запрещенное слово')
-            else:
-                return cleaned_data
+        return cleaned_data
+
+    def clean_description(self):
+        forbidden_words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция',
+                           'радар']
+        cleaned_data = self.cleaned_data['description']
+
+        for i in forbidden_words:
+            if i in cleaned_data:
+                raise forms.ValidationError('Вы ввели запрещенное слово')
+        return cleaned_data
 
 
 class VersionForm(StyleMixin, ModelForm):
