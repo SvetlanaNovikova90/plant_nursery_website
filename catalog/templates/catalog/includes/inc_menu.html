@@ -19,8 +19,12 @@
           </a></li>
           <li class="nav-item"><a class="nav-link" href="#">Заказ</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'shop:blog_post'%}">Блог</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Доставка</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Карзина</a></li>
+          {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'users:logout'%}" target="_blank">Выход</a></li>
+          {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'users:login'%}" target="_blank">Вход</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'users:register'%}" target="_blank">Регистрация</a></li>
+          {% endif %}
           <li class="nav-item"><a class="nav-link" href="{% url 'shop:contact'%}" target="_blank">Контакты</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'shop:products'%}" target="_blank">Каталог</a></li>
         </ul>
