@@ -1,10 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 from django.forms import inlineformset_factory
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from pytils.translit import slugify
 
-from catalog.forms import ProductForm, VersionForm
+from catalog.forms import ProductForm, VersionForm, ProductIsPublishedForm, ProductDescriptionForm, ProductCategoryForm
 from catalog.models import Product, BlogPost, Version
 
 
@@ -42,18 +43,52 @@ class ProductsDetailView(DetailView):
     template_name = "catalog/products_detail.html"
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(CreateView, LoginRequiredMixin):
     model = Product
     template_name = "catalog/product_form.html"
     form_class = ProductForm
     success_url = reverse_lazy('shop:products')
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
 
-class ProductUpdateView(UpdateView):
+        if self.request.method == 'POST':
+            formset = VersionFormset(self.request.POST, instance=self.object)
+        else:
+            formset = VersionFormset(instance=self.object)
+        context_data['formset'] = formset
+        return context_data
+
+    def form_valid(self, form):
+
+        product = form.save()
+        product.creator = self.request.user
+        product.save()
+
+        context_data = self.get_context_data()
+        formset = context_data['formset']
+
+        if formset.is_valid():
+            formset.instance = product
+            formset.save()
+        return super().form_valid(form)
+
+
+class ProductUpdateView(UpdateView, LoginRequiredMixin, UserPassesTestMixin):
     model = Product
     template_name = "catalog/product_form.html"
     form_class = ProductForm
     success_url = reverse_lazy('shop:products')
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        return self.object
+
+    def test_func(self):
+        product = self.get_object()
+        user = self.request.user
+        return product.creator == user or user.is_superuser
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -76,10 +111,38 @@ class ProductUpdateView(UpdateView):
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(DeleteView, LoginRequiredMixin):
     model = Product
     template_name = "catalog/product_confirm_delete.html"
     success_url = reverse_lazy('shop:products')
+
+
+class ProductUpdateIsPublishedView(UpdateView, PermissionRequiredMixin):
+    model = Product
+    template_name = 'catalog/product_form.html'
+    form_class = ProductIsPublishedForm
+    permission_required = ('Можно изменить статус продукта',)
+
+    success_url = reverse_lazy('shop:home')
+
+
+class ProductUpdateDescriptionView(UpdateView, PermissionRequiredMixin):
+    model = Product
+    template_name = 'catalog/product_form.html'
+    form_class = ProductDescriptionForm
+    permission_required = ('Можно изменить описание товара',)
+
+    success_url = reverse_lazy('shop:home')
+
+
+class ProductUpdateCategoryView(UpdateView, PermissionRequiredMixin):
+    model = Product
+    template_name = 'catalog/product_form.html'
+    form_class = ProductCategoryForm
+    permission_required = ('Можно изменить категорию продукта',)
+
+    success_url = reverse_lazy('shop:home')
+
 
 
 class BlogPostListView(ListView):

@@ -24,7 +24,28 @@
                   <p class="card-text">{{product.description}}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Купить</button>
+                         {% if user.is_authenticated %}
+                    {% if user == object.creator or user.is_superuser %}
+                      <a class="btn btn-outline-success" href="{% url 'shop:product_update' product.pk %}" role="button">Изменить</a>
+                         {% else %}
+                        {% if perms.catalog.set_published_status %}
+                            <p>
+                                <a class="btn btn-warning" href="{% url 'catalog:update_product_is_published' object.pk %}">Статус публикации</a>
+                            </p>
+                        {% endif %}
+                        {% if perms.catalog.can_change_description %}
+                            <p>
+                                <a class="btn btn-warning" href="{% url 'catalog:update_product_description' object.pk %}">Поменять описание</a>
+                            </p>
+                        {% endif %}
+                        {% if perms.catalog.can_change_category %}
+                            <p>
+                                <a class="btn btn-warning" href="{% url 'catalog:update_product_category' object.pk %}">Поменять категорию</a>
+                            </p>
+                        {% endif %}
+                    {% endif %}
+                        {% endif %}
+                       <a class="btn btn-outline-success" href="{% url 'shop:product_delete' product.pk %}" role="button">Удалить</a>
                       <button type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'shop:products'%}">Обратно</button>
                     </div>
                     <small class="text-muted">{{product.price}} руб.</small>
