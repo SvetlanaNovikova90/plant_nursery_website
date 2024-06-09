@@ -15,12 +15,12 @@ from config.settings import EMAIL_HOST_USER
 class UserCreateView(CreateView):
     model = User
     form_class = UserRegisterForm
-    success_url = reverse_lazy('users:login')
+    success_url = reverse_lazy('users:register_message')
 
     def form_valid(self, form):
         user = form.save()
         user.is_active = False
-
+        user.set_password(user.password)
         token = "".join([str(random.randint(0, 9)) for i in range(10)])
         user.token = token
         user.save()
@@ -46,7 +46,7 @@ class PasswordRecoveryMessageView(TemplateView):
 def email_verification(request, token):
     user = get_object_or_404(User, token=token)
     user.is_active = True
-    return redirect(reverse('users:login'))
+    return HttpResponseRedirect('/users/login/')
 
 
 class PasswordRecoveryView(TemplateView):

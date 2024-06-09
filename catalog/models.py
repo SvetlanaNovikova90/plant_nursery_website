@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import User
+
 NULLABLE = {"blank": True, "null": True}
 
 
@@ -21,6 +23,9 @@ class Product(models.Model):
     updated_at = models.DateField(
         auto_now=True, verbose_name="Дата последнего изменения"
     )
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Создатель')
+
+    is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
 
     def __str__(self):
         return f"{self.name}"
@@ -29,6 +34,9 @@ class Product(models.Model):
         verbose_name = "продукт"
         verbose_name_plural = "продукты"
         ordering = ["category"]
+        permissions = [('can_change_description', 'Can change product description',),
+                       ('can_change_category', 'Can change product category',),
+                       ('set_published_status', 'Can change product published status',)]
 
 
 class Category(models.Model):
@@ -53,6 +61,7 @@ class BlogPost(models.Model):
     created_at = models.DateField(auto_now_add=True, verbose_name="Дата создания")
     is_active = models.BooleanField(default=True)
     views_counter = models.IntegerField(default=0, verbose_name="Счетчик просмотров")
+    publication_sign = models.BooleanField(default=True, verbose_name='признак публикации')
 
     def __str__(self):
         return f"{self.title}"
@@ -60,6 +69,7 @@ class BlogPost(models.Model):
     class Meta:
         verbose_name = "пост"
         verbose_name_plural = "посты"
+        permissions = [('can_change_publication_sign', 'Can change blog publication_sign',)]
 
 
 class Version(models.Model):

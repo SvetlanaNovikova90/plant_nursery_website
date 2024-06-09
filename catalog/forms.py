@@ -1,19 +1,19 @@
-from django.forms import ModelForm, forms, BooleanField
+from django import forms
 
 from catalog.models import Product, Version
 
 
-class StyleMixin:
+class StyleMixin(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for fild_name, fild in self.fields.items():
-            if isinstance(fild, BooleanField):
-                fild.widget.attrs['class'] = "form-check-input"
-            else:
-                fild.widget.attrs['class'] = "form-control"
+
+        for field_name, field in self.fields.items():
+            if field_name != 'current_version_indicator' and field_name != 'publication_sign' and field_name != 'is_published':
+
+                field.widget.attrs["class"] = "form-control"
 
 
-class ProductForm(StyleMixin, ModelForm):
+class ProductForm(StyleMixin):
     class Meta:
         model = Product
         fields = ('name', 'description', 'image_ph', 'category', 'price')
@@ -39,6 +39,12 @@ class ProductForm(StyleMixin, ModelForm):
         return cleaned_data
 
 
+# class ProductModeratorForm(StyleMixin, ModelForm):
+#     class Meta:
+#         model = Product
+#         fields = ('description', 'category')
+
+
 class ProductIsPublishedForm(StyleMixin):
 
     class Meta:
@@ -60,7 +66,8 @@ class ProductCategoryForm(StyleMixin):
         fields = ('category',)
 
 
-class VersionForm(StyleMixin, ModelForm):
+class VersionForm(StyleMixin):
+
     class Meta:
         model = Version
         fields = '__all__'

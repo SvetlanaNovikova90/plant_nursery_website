@@ -16,11 +16,13 @@ urlpatterns = [
     path("<int:pk>/update/", PostUpdateView.as_view(), name='post_update'),
     path("delete/<int:pk>/", PostDeleteView.as_view(), name='post_delete'),
     path("product_create/", ProductCreateView.as_view(), name='product_create'),
-    path("<int:pk>/product_update/", ProductUpdateView.as_view(), name='product_update'),
-    path("product_delete/<int:pk>/", ProductDeleteView.as_view(), name='product_delete'),
+    path('update_product/<int:pk>/', ProductUpdateView.as_view(), name="update_product"),
+
     path('update_product_is_published/<int:pk>/', ProductUpdateIsPublishedView.as_view(),
          name="update_product_is_published"),
     path('update_product_description/<int:pk>/', ProductUpdateDescriptionView.as_view(),
          name="update_product_description"),
     path('update_product_category/<int:pk>/', ProductUpdateCategoryView.as_view(), name="update_product_category"),
+
+    path('delete_product/<int:pk>/', ProductDeleteView.as_view(), name="delete_product"),
 ]
