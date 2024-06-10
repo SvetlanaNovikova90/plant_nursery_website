@@ -6,7 +6,8 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from pytils.translit import slugify
 
-from catalog.forms import ProductForm, VersionForm, ProductIsPublishedForm, ProductDescriptionForm, ProductCategoryForm
+from catalog.forms import ProductForm, VersionForm, ProductIsPublishedForm, ProductDescriptionForm, ProductCategoryForm, \
+    ProductModeratorForm
 from catalog.models import Product, BlogPost, Version
 
 
@@ -111,13 +112,13 @@ class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
-    # def get_form_class(self):
-    #     user = self.request.user
-    #     if user == self.object.owner:
-    #         return ProductForm
-    #     if user.has_perm("catalog.can_edit_description") and user.has_perm("catalog.can_edit_category"):
-    #         return ProductModeratorForm
-    #     return PermissionDenied
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if user.has_perm("catalog.can_edit_description") and user.has_perm("catalog.can_edit_category"):
+            return ProductModeratorForm
+        return PermissionDenied
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):

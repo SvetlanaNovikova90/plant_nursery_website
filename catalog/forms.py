@@ -1,5 +1,6 @@
 from django import forms
 
+
 from catalog.models import Product, Version
 
 
@@ -39,10 +40,10 @@ class ProductForm(StyleMixin):
         return cleaned_data
 
 
-# class ProductModeratorForm(StyleMixin, ModelForm):
-#     class Meta:
-#         model = Product
-#         fields = ('description', 'category')
+class ProductModeratorForm(StyleMixin):
+    class Meta:
+        model = Product
+        fields = ('description', 'category')
 
 
 class ProductIsPublishedForm(StyleMixin):
