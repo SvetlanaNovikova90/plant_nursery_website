@@ -1,4 +1,7 @@
+from itertools import product
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.shortcuts import render, get_object_or_404
@@ -8,7 +11,9 @@ from pytils.translit import slugify
 
 from catalog.forms import ProductForm, VersionForm, ProductIsPublishedForm, ProductDescriptionForm, ProductCategoryForm, \
     ProductModeratorForm
-from catalog.models import Product, BlogPost, Version
+from catalog.models import Product, BlogPost, Version, Category
+from catalog.services import get_cached_subjects_for_product
+
 
 
 def contact(request):
@@ -208,3 +213,19 @@ class PostDeleteView(DeleteView):
     model = BlogPost
     template_name = "catalog/blogpost_confirm_delete.html"
     success_url = reverse_lazy('shop:blog_post')
+
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = "catalog/category_list.html"
+
+
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = "catalog/сategory_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+
+        context_data['products'] = get_cached_subjects_for_product(self.object.pk)
+        return context_data
